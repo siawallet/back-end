@@ -1,0 +1,90 @@
+[
+    {
+        "id": 1,
+        "from": "RAM",
+        "name": "demons/Sia0",
+        "api-addr": "localhost:9800",
+        "rpc-addr": "localhost:9801",
+        "host-addr": "localhost:9802"
+    },
+    {
+        "id": 2,
+        "from": "RAM",
+        "name": "demons/Sia1",
+        "api-addr": "localhost:9810",
+        "rpc-addr": "localhost:9811",
+        "host-addr": "localhost:9812"
+    },
+    {
+        "id": 3,
+        "from": "RAM",
+        "name": "demons/Sia2",
+        "api-addr": "localhost:9820",
+        "rpc-addr": "localhost:9821",
+        "host-addr": "localhost:9822"
+    },
+    {
+        "id": 4,
+        "from": "RAM",
+        "name": "demons/Sia3",
+        "api-addr": "localhost:9830",
+        "rpc-addr": "localhost:9831",
+        "host-addr": "localhost:9832"
+    },
+    {
+        "id": 5,
+        "from": "RAM",
+        "name": "demons/Sia4",
+        "api-addr": "localhost:9840",
+        "rpc-addr": "localhost:9841",
+        "host-addr": "localhost:9842"
+    },
+    {
+        "id": 6,
+        "from": "RAM",
+        "name": "demons/Sia5",
+        "api-addr": "localhost:9850",
+        "rpc-addr": "localhost:9851",
+        "host-addr": "localhost:9852"
+    },
+    {
+        "id": 7,
+        "from": "RAM",
+        "name": "demons/Sia6",
+        "api-addr": "localhost:9860",
+        "rpc-addr": "localhost:9861",
+        "host-addr": "localhost:9862"
+    },
+    {
+        "id": 8,
+        "from": "RAM",
+        "name": "demons/Sia7",
+        "api-addr": "localhost:9870",
+        "rpc-addr": "localhost:9871",
+        "host-addr": "localhost:9872"
+    },
+    {
+        "id": 9,
+        "from": "RAM",
+        "name": "demons/Sia8",
+        "api-addr": "localhost:9880",
+        "rpc-addr": "localhost:9881",
+        "host-addr": "localhost:9882"
+    },
+    {
+        "id": 10,
+        "from": "RAM",
+        "name": "demons/Sia9",
+        "api-addr": "localhost:9890",
+        "rpc-addr": "localhost:9891",
+        "host-addr": "localhost:9892"
+    },
+    {
+        "id": 11,
+        "from": "RAM",
+        "name": "demons/Sia10",
+        "api-addr": "localhost:9900",
+        "rpc-addr": "localhost:9901",
+        "host-addr": "localhost:9902"
+    }
+]

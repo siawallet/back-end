@@ -1,0 +1,90 @@
+[
+    {
+        "id": 100,
+        "from": "HHD",
+        "name": "hhd_demons/Sia0",
+        "api-addr": "localhost:8800",
+        "rpc-addr": "localhost:8801",
+        "host-addr": "localhost:8802"
+    },
+    {
+        "id": 101,
+        "from": "HHD",
+        "name": "hhd_demons/Sia1",
+        "api-addr": "localhost:8810",
+        "rpc-addr": "localhost:8811",
+        "host-addr": "localhost:8812"
+    },
+    {
+        "id": 102,
+        "from": "HHD",
+        "name": "hhd_demons/Sia2",
+        "api-addr": "localhost:8820",
+        "rpc-addr": "localhost:8821",
+        "host-addr": "localhost:8822"
+    },
+    {
+        "id": 103,
+        "from": "HHD",
+        "name": "hhd_demons/Sia3",
+        "api-addr": "localhost:8830",
+        "rpc-addr": "localhost:8831",
+        "host-addr": "localhost:8832"
+    },
+    {
+        "id": 104,
+        "from": "HHD",
+        "name": "hhd_demons/Sia4",
+        "api-addr": "localhost:8840",
+        "rpc-addr": "localhost:8841",
+        "host-addr": "localhost:8842"
+    },
+    {
+        "id": 105,
+        "from": "HHD",
+        "name": "hhd_demons/Sia5",
+        "api-addr": "localhost:8850",
+        "rpc-addr": "localhost:8851",
+        "host-addr": "localhost:8852"
+    },
+    {
+        "id": 106,
+        "from": "HHD",
+        "name": "hhd_demons/Sia6",
+        "api-addr": "localhost:8860",
+        "rpc-addr": "localhost:8861",
+        "host-addr": "localhost:8862"
+    },
+    {
+        "id": 107,
+        "from": "HHD",
+        "name": "hhd_demons/Sia7",
+        "api-addr": "localhost:8870",
+        "rpc-addr": "localhost:8871",
+        "host-addr": "localhost:8872"
+    },
+    {
+        "id": 108,
+        "from": "HHD",
+        "name": "hhd_demons/Sia8",
+        "api-addr": "localhost:8880",
+        "rpc-addr": "localhost:8881",
+        "host-addr": "localhost:8882"
+    },
+    {
+        "id": 109,
+        "from": "HHD",
+        "name": "hhd_demons/Sia9",
+        "api-addr": "localhost:8890",
+        "rpc-addr": "localhost:8891",
+        "host-addr": "localhost:8892"
+    },
+    {
+        "id": 110,
+        "from": "HHD",
+        "name": "hhd_demons/Sia10",
+        "api-addr": "localhost:8900",
+        "rpc-addr": "localhost:8901",
+        "host-addr": "localhost:8902"
+    }
+]

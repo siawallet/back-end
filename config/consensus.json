@@ -1,0 +1,10 @@
+[
+    {
+        "id": "consensus",
+        "from": "Ccnsensus",
+        "name": "consensus",
+        "api-addr": "localhost:9000",
+        "rpc-addr": "localhost:9001",
+        "host-addr": "localhost:9002"
+    }
+]
