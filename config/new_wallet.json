@@ -1,0 +1,10 @@
+[
+    {
+        "id": "new_wallet",
+        "from": "new_wallet",
+        "name": "new_wallet",
+        "api-addr": "localhost:9100",
+        "rpc-addr": "localhost:9101",
+        "host-addr": "localhost:9102"
+    }
+]

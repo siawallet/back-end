@@ -2,6 +2,8 @@
 process.env.UV_THREADPOOL_SIZE = 128;
 
 var helpers = require('./helpers/helpers');
+var bot = require('./helpers/bot');
+
 var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
@@ -17,8 +19,31 @@ var newWallet = require("./services/newWallet");
 var price = require("./services/price");
 var consensus = require("./services/consensus");
 
+
 const multer = require('multer');
 const upload = multer();
+
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+
+var credentials = {
+
+    key: fs.readFileSync("./keys/server.key"),
+
+    cert: fs.readFileSync("./keys/api_siawallet_io.crt"),
+
+    ca: [
+
+        fs.readFileSync('./keys/AddTrustExternalCARoot.crt'),
+
+        fs.readFileSync('./keys/SectigoRSADomainValidationSecureServerCA.crt'),
+
+        fs.readFileSync('./keys/USERTrustRSAAddTrustCA.crt')
+
+    ]
+};
+
 
 
 var cors = require('cors');
@@ -57,7 +82,7 @@ app.post('/logout', upload.none(), async (req, res) => {
         res.status(400).end();
     } else {
         data[index].lastUpdate = new Date();
-        logout.logout(index, data, res, decode, true)
+        logout.logout(index, data, res, decode)
     }
 });
 
@@ -86,6 +111,9 @@ app.post("/coins", (req, res) => {
             .catch((err) => {
                 res.statusMessage = err.response.body.message;
                 res.status(err.response.statusCode).end();
+
+                bot.sendErrors(err, "error from getCoins GET /wallet")
+
             });
     }
 });
@@ -128,9 +156,17 @@ app.get("/price", async (req, res) => {
     price.getPrice(req, res)
 })
 
-app.listen(3000, async () => {
+
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(443);
+
+httpServer.listen(80, async () => {
     wallet.walletInit();
     init.init();
+    bot.runBot()
+
     logOutByTime();
 });
 
@@ -143,7 +179,8 @@ function logOutByTime() {
                     let d1 = new Date(data[i].lastUpdate);
                     let d2 = new Date();
                     let d3 = d2.getTime() - d1.getTime();
-                    if (d3 > 120000) {
+                    if (d3 > 720000) {
+                        console.log("logout from logOutByTime work")
                         logout.logout(i, data, null, data[i].wallet, false)
                     }
                 }

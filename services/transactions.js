@@ -1,6 +1,8 @@
 var helpers = require("../helpers/helpers");
 var wallet = require("../services/seed");
 var _ = require("lodash");
+var bot = require('../helpers/bot');
+
 
 module.exports.getTransactions = (req, res) => {
     let decode = helpers.decodeWallet(req.body.wallet);
@@ -22,8 +24,12 @@ module.exports.getTransactions = (req, res) => {
                 res.send(data);
             })
             .catch((err) => {
+
                 res.statusMessage = err.response.body.message;
                 res.status(err.response.statusCode).end();
+
+                bot.sendErrors(err, "error from sendCoins GET /wallet/transactions")
+
             });
     }
 }

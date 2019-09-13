@@ -2,6 +2,7 @@ var helpers = require("../helpers/helpers");
 var wallet = require("../services/seed");
 var consensus = require("../config/consensus.json");
 var getConsensus = require("./consensus");
+var new_wallet = require("../config/new_wallet.json");
 
 var demonData
 var index = 0
@@ -13,6 +14,7 @@ module.exports.init = () => {
 function startInit() {
     demonData = wallet.allWallets();
     demonData = demonData.concat(consensus);
+    demonData = demonData.concat(new_wallet)
 
     if (demonData[index] != undefined) {
         let client = helpers.siaClient(demonData[index]["api-addr"])
@@ -34,6 +36,7 @@ function startInit() {
             }
         })
     } else {
+        console.log("all demons is running")
         getConsensus.getMainConsensus();
     }
 }
@@ -44,6 +47,7 @@ function stopDemon(client, i) {
             checkStatus(i)
         })
         .catch((err) => {
+            console.log("stop error")
             console.log(err);
         });
 }
@@ -79,6 +83,7 @@ async function getStatusOfDemons(i) {
             index = i + 1;
             startInit();
         } else {
+            console.log("try again: " + demonData[i].name);
             startDemon(i);
         }
     }, 2000)

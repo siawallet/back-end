@@ -4,8 +4,8 @@ var helpers = require("../helpers/helpers");
 var glob = require("glob");
 var _ = require("lodash");
 var logout = require('./logout');
-var fs = require('fs');
 var readLastLines = require('read-last-lines');
+var bot = require('../helpers/bot');
 
 
 var walletData;
@@ -40,6 +40,9 @@ module.exports.gotSeed = (wallet, res) => {
                     if (findWalletNull === -1) {
                         res.statusMessage = "The server is busy with other users, please try again in a few minutes. Your data is not stored.";
                         res.status(400).end();
+
+                        bot.sendErrors("error RAM The server is busy with other users, please try again in a few minutes. Your data is not  stored.", "error RAM")
+
                     } else {
                         let index = _.findIndex(walletData, function (o) { return o.id === object[findWalletNull].id });
                         walletData[index].wallet = decode;
@@ -52,8 +55,11 @@ module.exports.gotSeed = (wallet, res) => {
                     let object = _.filter(walletData, function (o) { return o.from === "HHD" });
                     let findWalletNull = _.findIndex(object, function (o) { return o.wallet === null });
                     if (findWalletNull === -1) {
-                        res.statusMessage = "The server is busy with other users, please try again in a few minutes. Your data is not  stored.";
+                        res.statusMessage = "The server is busy with other users, please try again in a few minutes. Your data is not stored.";
                         res.status(400).end();
+
+                        bot.sendErrors("error HHD The server is busy with other users, please try again in a few minutes. Your data is not stored.", "error HHD")
+
                     } else {
 
                         let index = _.findIndex(walletData, function (o) { return o.id === object[findWalletNull].id });
@@ -85,6 +91,7 @@ function checkIfDemonIsReady(wallet, res, index, way) {
             }
         })
         .catch((err) => {
+            console.log("get coins error")
             let findError = err.message.search("Error: connect ECONNREFUSED");
             if (findError !== -1) {
                 setTimeout(() => {
@@ -101,7 +108,9 @@ async function checkConsensus(wallet, res, index) {
     let consensus = await client.sendRequest('GET', '/consensus').then((data) => {
         return data.synced;
     }).catch((err) => {
-        console.log(err)
+
+        bot.sendErrors(err, "error from checkConsensus GET /consensus")
+
     })
 
     if (consensus === true) {
@@ -121,12 +130,17 @@ function newWallet(wallet, res, index, client) {
         forse: true
     }).catch((err) => {
         if (err.response !== undefined) {
+
             walletData[index].wallet = null
             walletData[index].lastUpdate = null;
             waitForStatusTimer = true
-            res.statusMessage = err.response.body.message;
-            res.status(err.response.statusCode).end();
+
+            res.status(err.response.statusCode);
+            res.send(err.response.body.message);
         }
+
+        bot.sendErrors(err, "error from newWallet GET /wallet/init/seed")
+
     })
     setTimeout(() => {
         if (waitForStatusTimer === false) {
@@ -162,21 +176,20 @@ function waitForUnlock(w, index, client) {
 }
 
 function unlockWallet(w, index, client) {
+    console.log(w);
     let unlock = true
     client.sendRequest('POST', '/wallet/unlock', {
         encryptionpassword: w,
     }).catch((err) => {
         if (err.response !== undefined) {
 
+            bot.sendErrors(err, "error from unlockWallet POST /wallet/unlock")
+
             let alredyUnlocked = err.response.body.message.search("wallet has already been unlocked") != -1 ? true : false
             if (alredyUnlocked === true) {
                 walletData[index].status = "unlock";
                 unlock = false;
-                fs.writeFile("/root/" + walletData[index].name + "/nohup.out", "Unlocked", (err) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                });
+
                 backup(w, index, client)
             }
         }
@@ -220,11 +233,13 @@ function backup(w, index, client) {
     client.sendRequest('GET', '/wallet/backup', {
         destination: "/root/wallets/" + decode
     }).catch((err) => {
-        console.log(err);
+
+        bot.sendErrors(err, "error from backup GET /wallet/backup")
+
     })
     walletData[index].status = "done";
     if (walletData[index].logout === true) {
-        logout.logout(index, walletData, null, decode, false)
+        logout.logout(index, walletData, null, decode)
     }
 }
 
@@ -240,6 +255,9 @@ function oldWallet(wallet, res, index) {
         })
         .catch((err) => {
             res.send(err);
+
+            bot.sendErrors(err, "error from oldWallet GET /daemon/stop")
+
         });
 }
 
@@ -254,10 +272,12 @@ function copyWallet(wallet, res, index, client) {
                 if (runSia.search("done") != -1) {
                     startDemon(wallet, res, index, client);
                 } else {
+                    console.log("function start Demon is not executed")
                     res.send("function start Demon is not executed")
                 }
             }
         } else {
+            console.log("shutdown is error");
             copyWallet(wallet, res, index, client);
         }
     }, 1000)
@@ -285,7 +305,9 @@ async function checkConsensusExistWallet(wallet, res, index, client) {
     let consensus = await client.sendRequest('GET', '/consensus').then((data) => {
         return data;
     }).catch((err) => {
-        console.log(err)
+
+        bot.sendErrors(err, "error from checkConsensusExistWallet GET /consensus")
+
     })
 
     let basicConsensus = await readLastLines.read('/root/consensus/consensus.out', 1);
@@ -310,8 +332,10 @@ function setUnlockExistWallet(wallet, res, index, client) {
     let promise = new Promise((resolve, reject) => {
         client.sendRequest('POST', '/wallet/unlock', {
             encryptionpassword: wallet,
-        }).catch((err)=>{
-            console.log(err)
+        }).catch((err) => {
+
+            bot.sendErrors(err, "error from setUnlockExistWallet GET /wallet/unlock")
+
         })
         setTimeout(() => {
             resolve("done");

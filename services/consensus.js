@@ -4,6 +4,7 @@ var consensusData = require("../config/consensus.json");
 const fs = require('fs');
 var readLastLines = require('read-last-lines');
 var _ = require("lodash");
+var bot = require('../helpers/bot');
 
 
 
@@ -25,7 +26,9 @@ module.exports.getMainConsensus = () => {
                 });
             })
             .catch((err) => {
-                console.log(err);
+
+                bot.sendErrors(err, "error from getMainConsensus GET /consensus")
+
             });
     }, 10000)
 }
@@ -46,8 +49,12 @@ module.exports.walletConsensus = (req, res) => {
                 res.send(data);
             })
             .catch((err) => {
+
                 res.statusMessage = err.response.body.message;
                 res.status(err.response.statusCode).end();
+
+                bot.sendErrors(err, "error from walletConsensus GET /consensus")
+
             });
     }
 
