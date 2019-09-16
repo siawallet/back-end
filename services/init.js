@@ -36,7 +36,6 @@ function startInit() {
             }
         })
     } else {
-        console.log("all demons is running")
         getConsensus.getMainConsensus();
     }
 }
@@ -47,8 +46,7 @@ function stopDemon(client, i) {
             checkStatus(i)
         })
         .catch((err) => {
-            console.log("stop error")
-            console.log(err);
+ 
         });
 }
 
@@ -83,7 +81,6 @@ async function getStatusOfDemons(i) {
             index = i + 1;
             startInit();
         } else {
-            console.log("try again: " + demonData[i].name);
             startDemon(i);
         }
     }, 2000)

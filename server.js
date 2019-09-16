@@ -180,7 +180,6 @@ function logOutByTime() {
                     let d2 = new Date();
                     let d3 = d2.getTime() - d1.getTime();
                     if (d3 > 720000) {
-                        console.log("logout from logOutByTime work")
                         logout.logout(i, data, null, data[i].wallet, false)
                     }
                 }

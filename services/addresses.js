@@ -9,7 +9,6 @@ module.exports.getAddresses = (req, res) => {
     let data = wallet.allWallets();
     let index = _.findIndex(data, function (o) { return o.wallet === decode });
     if (index === -1) {
-        console.log("getAddresses wallet not found")
         res.statusMessage = "wallet not found";
         res.status(400).end();
     } else {
@@ -37,7 +36,6 @@ module.exports.setAddresses = (req, res) => {
     let data = wallet.allWallets();
     let index = _.findIndex(data, function (o) { return o.wallet === decode });
     if (index === -1) {
-        console.log("setAddresses wallet not found")
         res.statusMessage = "wallet not found";
         res.status(400).end();
     } else {

@@ -91,7 +91,6 @@ function checkIfDemonIsReady(wallet, res, index, way) {
             }
         })
         .catch((err) => {
-            console.log("get coins error")
             let findError = err.message.search("Error: connect ECONNREFUSED");
             if (findError !== -1) {
                 setTimeout(() => {
@@ -176,7 +175,6 @@ function waitForUnlock(w, index, client) {
 }
 
 function unlockWallet(w, index, client) {
-    console.log(w);
     let unlock = true
     client.sendRequest('POST', '/wallet/unlock', {
         encryptionpassword: w,
@@ -272,12 +270,10 @@ function copyWallet(wallet, res, index, client) {
                 if (runSia.search("done") != -1) {
                     startDemon(wallet, res, index, client);
                 } else {
-                    console.log("function start Demon is not executed")
                     res.send("function start Demon is not executed")
                 }
             }
         } else {
-            console.log("shutdown is error");
             copyWallet(wallet, res, index, client);
         }
     }, 1000)

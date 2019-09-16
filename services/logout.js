@@ -74,7 +74,6 @@ async function getStatusOfDemons(i, data) {
             data[i].status = null;
             data[i].lastUpdate = null;
         } else {
-            console.log("try again: " + data[i].name);
             startDemon(i, data);
         }
     }, 2000)
