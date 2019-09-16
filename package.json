@@ -18,7 +18,7 @@
     "discord.js": "^11.5.1",
     "express": "^4.17.1",
     "glob": "^7.1.4",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "multer": "^1.4.2",
     "node-sia": "^1.0.2",
     "read-last-lines": "^1.7.1",
