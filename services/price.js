@@ -1,5 +1,8 @@
 const rp = require('request-promise');
 var bot = require('../helpers/bot');
+const fs = require('fs');
+var readLastLines = require('read-last-lines');
+
 
 module.exports.getPrice = (req, res) => {
   let id = '1042'
@@ -17,11 +20,25 @@ module.exports.getPrice = (req, res) => {
   };
 
   rp(requestOptions).then(response => {
-    res.send(response.data[id]);
-  }).catch((err) => {
 
-    res.statusMessage = err.response.body.message;
-    res.status(err.response.statusCode).end();
+    fs.writeFile("/root/sia_node/price.out", response.data[id].quote.USD.price, (err) => {
+      if (err) {
+        return console.log("Error from write price pro-api.coinmarketcap: " + err );
+      }
+    });
+
+    let data = {
+      price: response.data[id].quote.USD.price
+    }
+
+    res.send(data);
+  }).catch( async (err) => {
+
+    let x = await readLastLines.read('/root/sia_node/price.out', 1);
+    let data = {
+      price: x
+    }
+    res.send(data);
 
     bot.sendErrors(err, "error from getPrice - pro-api.coinmarketcap")
 

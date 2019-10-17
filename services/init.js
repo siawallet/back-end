@@ -36,6 +36,7 @@ function startInit() {
             }
         })
     } else {
+        console.log("all demons is running")
         getConsensus.getMainConsensus();
     }
 }
@@ -46,7 +47,8 @@ function stopDemon(client, i) {
             checkStatus(i)
         })
         .catch((err) => {
- 
+            console.log("stop error")
+            console.log(err);
         });
 }
 

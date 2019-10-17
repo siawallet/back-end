@@ -18,6 +18,10 @@ var send = require("./services/send");
 var newWallet = require("./services/newWallet");
 var price = require("./services/price");
 var consensus = require("./services/consensus");
+var actions = require("./services/actions");
+var auth = require("./services/auth");
+var password = require("./services/password")
+
 
 
 const multer = require('multer');
@@ -59,9 +63,8 @@ app.use(bodyParser.urlencoded({
 
 
 app.post('/getstatus', async (req, res) => {
-    let decode = helpers.decodeWallet(req.body.wallet);
     let data = wallet.allWallets();
-    let index = _.findIndex(data, function (o) { return o.wallet === decode });
+    let index = _.findIndex(data, function (o) { return o.wallet === req.body.wallet });
     if (index === -1) {
         res.statusMessage = "wallet not found";
         res.status(400).end();
@@ -74,15 +77,14 @@ app.post('/getstatus', async (req, res) => {
 
 app.post('/logout', upload.none(), async (req, res) => {
     let value = JSON.parse(req.body)
-    let decode = helpers.decodeWallet(value.wallet);
     let data = wallet.allWallets();
-    let index = _.findIndex(data, function (o) { return o.wallet === decode });
+    let index = _.findIndex(data, function (o) { return o.wallet === value.wallet });
     if (index === -1) {
         res.statusMessage = "wallet not found";
         res.status(400).end();
     } else {
         data[index].lastUpdate = new Date();
-        logout.logout(index, data, res, decode)
+        logout.logout(index, data, res, value.wallet)
     }
 });
 
@@ -93,9 +95,8 @@ app.get("/allData", (req, res) => {
 
 
 app.post("/coins", (req, res) => {
-    let decode = helpers.decodeWallet(req.body.wallet);
     let data = wallet.allWallets();
-    let index = _.findIndex(data, function (o) { return o.wallet === decode });
+    let index = _.findIndex(data, function (o) { return o.wallet === req.body.wallet });
     if (index === -1) {
         res.statusMessage = "wallet not found";
         res.status(400).end();
@@ -109,11 +110,12 @@ app.post("/coins", (req, res) => {
                 res.send(data);
             })
             .catch((err) => {
-                res.statusMessage = err.response.body.message;
-                res.status(err.response.statusCode).end();
-
                 bot.sendErrors(err, "error from getCoins GET /wallet")
 
+                if (err.response !== undefined && err.response.body !== undefined) {
+                    res.statusMessage = err.response.body.message;
+                    res.status(err.response.statusCode).end();
+                }
             });
     }
 });
@@ -137,7 +139,7 @@ app.post("/addresses/create", async (req, res) => {
 
 
 app.post("/seed", async (req, res) => {
-    wallet.gotSeed(req.body.wallet, res)
+    wallet.gotSeed(req, res)
 })
 
 app.post("/transactions", async (req, res) => {
@@ -155,6 +157,43 @@ app.get("/create", async (req, res) => {
 app.get("/price", async (req, res) => {
     price.getPrice(req, res)
 })
+
+app.post('/delete', function (req, res) {
+    actions.deleteWallet(req, res)
+});
+
+app.post('/download', function (req, res) {
+    actions.download(req, res)
+});
+
+app.post('/auth', function (req, res) {
+    auth.auth(req, res)
+});
+
+app.post('/auth/guard', function (req, res) {
+    auth.authGuard(req, res)
+});
+
+app.post('/auth/update', function (req, res) {
+    auth.userUpdate(req, res)
+});
+
+app.post('/login', function (req, res) {
+    auth.login(req, res)
+});
+
+app.post('/password', function (req, res) {
+    password.setPassword(req, res)
+});
+
+app.post('/auth/existed/user', function (req, res) {
+    auth.existedUser(req, res)
+});
+
+app.post('/auth/delete', function (req, res) {
+    auth.authDelete(req, res)
+});
+
 
 
 var httpServer = http.createServer(app);
@@ -186,7 +225,6 @@ function logOutByTime() {
             }
         }
     }, 120000)
-
 }
 
 

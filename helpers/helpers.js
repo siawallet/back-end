@@ -29,9 +29,9 @@ module.exports.runDemon = (name, apiAddr, rpcAddr, hostAddr) => {
       var err = fs.openSync('../' + name + '/nohup.out', 'a');
       child_process.spawn('nohup',
          ['./siad',
-            //  '--authenticate-api=false',
             '-M',
             'gctw',
+            '--authenticate-api=false',
             "--api-addr=" + apiAddr,
             "--rpc-addr=" + rpcAddr,
             "--host-addr=" + hostAddr],
@@ -52,7 +52,7 @@ module.exports.decodeWallet = wallet => {
 module.exports.siaClient = port => {
    var parameters = {
       "url": "http://" + port,
-      "password": "Bla_bla_bla"
+      "password": "test"
    }
 
    return new SiaClient(parameters);

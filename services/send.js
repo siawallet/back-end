@@ -5,9 +5,8 @@ var bot = require('../helpers/bot');
 
 
 module.exports.sendCoins = (req, res) => {
-    let decode = helpers.decodeWallet(req.body.wallet);
     let data = wallet.allWallets();
-    let index = _.findIndex(data, function (o) { return o.wallet === decode });
+    let index = _.findIndex(data, function (o) { return o.wallet === req.body.wallet });
     if (index === -1) {
         res.statusMessage = "wallet not found";
         res.status(400).end();
